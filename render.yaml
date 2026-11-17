@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: personal-ai-assistant-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: OWNER_PASSWORD
+        sync: false
+      # Render creates a strong random secret for you.
+      - key: JWT_SECRET
+        generateValue: true
+      - key: AI_PROVIDER
+        value: gemini
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-3.8-flash
+      # Timezone used for "what time is it" questions (IANA name, e.g. Asia/Kolkata).
+      - key: DEFAULT_TIMEZONE
+        value: UTC
